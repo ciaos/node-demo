@@ -12,14 +12,14 @@ node-demo
 ----------
 
 * 配置utoken.js文件
-<pre><code>
+```javascript
 var Appid     = "xxxxx" /*应用ID*/
 var Appsecret = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"  /*应用密钥*/
 var Appname   = "xxxxxx"  /*应用名称*/
-</code></pre>
+```
 
 * 将utoken.js放到服务器合适目录下，添加引用如下：
-<pre><code>
+```javascript
 utoken = require("./utoken");
 function utokenHandler(res, req){//get token from server
         //1, get client ip
@@ -32,7 +32,7 @@ function utokenHandler(res, req){//get token from server
                 res.end()
         })
 }
-</code></pre>
+```
 
 * 客户端访问该handler会得到“上传IP 上传密钥 时间戳”的字符串。具体上传方法参照相关文档说明
 
