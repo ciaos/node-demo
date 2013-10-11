@@ -5,9 +5,9 @@ var http   = require("http"),
 /**
  * Configure
  */
-var Appid     = "60850"
-var Appsecret = "yuaHJ4GEaoCXGIV2WRgWlGsvROhITUIg"
-var Appname   = "xqd"
+var Appid     = "xxxxx"
+var Appsecret = "xxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+var Appname   = "xxx"
 
 /**
  * Module
