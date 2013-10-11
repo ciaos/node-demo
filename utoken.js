@@ -5,9 +5,9 @@ var http   = require("http"),
 /**
  * Configure
  */
-var Appid     = "xxxxx"
-var Appsecret = "xxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-var Appname   = "xxx"
+var Appid     = "60850"
+var Appsecret = "yuaHJ4GEaoCXGIV2WRgWlGsvROhITUIg"
+var Appname   = "xqd"
 
 /**
  * Module
@@ -17,11 +17,11 @@ exports.getHostTokenTs = function(clientIp, callback_func){
 	var host, tsecret, ts
 
 	this.uri = {
-		host: "api.dbank.com",
-		port: 80,
-		path: "/rest.php",
-		method: "POST",
-		headers: {
+		host      : "api.dbank.com",
+		port      : 80,
+		path      : "/rest.php",
+		method    : "POST",
+		headers   : {
 			'Content-Type': 'application/x-www-form-urlencoded',
 		}
 	}
@@ -51,24 +51,36 @@ exports.getHostTokenTs = function(clientIp, callback_func){
 				var tmpsecret = crypto.createHmac('sha1', Appsecret).update(ts+"").digest('hex')
 				callback_func(ret.ip + " " + tmpsecret + " " + ts)
 			}
-			callback_func(body)
+			callback_func("error")
 		});
 		res.on("error",function(e){
-			console.log("err"+e.message)
+			callback_func(e.message)
 		});
 	}
 
 	this.result = function(){
 		var md5str = Appsecret
 		for (var key in dt) {md5str+=key+dt[key]}
-		var hash = crypto.createHash("md5")
-		dt.nsp_key = hash.update(md5str+"").digest('hex').toUpperCase()
+		dt.nsp_key = crypto.createHash("md5").update(md5str+"").digest('hex').toUpperCase()
 
 		var postdata = qs.stringify(dt)
 		this.uri.headers["Content-Length"] = Buffer.byteLength(postdata)
-		var req = http.request(this.uri, this.processRequest)
-		req.write(postdata)
-		req.end()
+
+		var req = null
+		var request_timer = setTimeout(function() {
+			req.emit("timeout");
+		}, 3000);
+
+		try{
+			req = http.request(this.uri, this.processRequest)
+			req.on("timeout", function(){
+				callback_func("connection timeout")
+				return
+			})
+			req.write(postdata)
+			req.end()
+		}catch(e){
+		}
 	}
 
 	this.result();
